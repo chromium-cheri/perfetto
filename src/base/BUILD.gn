@@ -80,6 +80,11 @@ perfetto_component("base") {
   if (enable_perfetto_stderr_crash_dump) {
     deps += [ ":debug_crash_stack_trace" ]
   }
+ 
+  if (is_bsd) {
+    include_dirs = [ "/usr/local/include/libepoll-shim" ]
+    libs = [ "epoll-shim" ]
+  }
 }
 
 # This target needs to be named as such because it's exposed directly in Bazel

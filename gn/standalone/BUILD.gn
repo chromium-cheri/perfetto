@@ -484,3 +484,14 @@ perfetto_check_build_deps("check_build_deps") {
 perfetto_check_build_deps("check_build_deps_android") {
   args = [ "--android" ]
 }
+
+config("purecap") {
+  cflags = [
+    "-Wno-excess-padding",
+    "-Wno-thread-safety-negative"
+  ]
+  cflags_cc = [
+    "-Wno-excess-padding",
+    "-Wno-thread-safety-negative"
+  ]
+}

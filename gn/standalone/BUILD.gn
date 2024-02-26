@@ -286,7 +286,7 @@ config("default") {
     }
   }
 
-  if (is_linux) {
+  if (is_linux || is_bsd) {
     # Enable LFS (large file support) for stat() and other syscalls.
     cflags += [
       "-D_FILE_OFFSET_BITS=64",
@@ -488,10 +488,14 @@ perfetto_check_build_deps("check_build_deps_android") {
 config("purecap") {
   cflags = [
     "-Wno-excess-padding",
-    "-Wno-thread-safety-negative"
+    "-Wno-thread-safety-negative",
+    "-Wno-thread-safety-analysis",
+    "-Wno-unused-parameter"
   ]
   cflags_cc = [
     "-Wno-excess-padding",
-    "-Wno-thread-safety-negative"
+    "-Wno-thread-safety-negative",
+    "-Wno-thread-safety-analysis",
+    "-Wno-unused-parameter"
   ]
 }

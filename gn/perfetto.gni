@@ -180,7 +180,7 @@ declare_args() {
   # the perfetto_build_flags.h header.
   enable_perfetto_watchdog =
       perfetto_build_with_android ||
-      (perfetto_build_standalone && !is_perfetto_build_generator)
+      (perfetto_build_standalone && !is_perfetto_build_generator && !is_bsd)
 
   # Misc host executable under tools/.
   enable_perfetto_tools =
@@ -232,7 +232,7 @@ declare_args() {
   # the stack and prints the stack trace on stderr. Requires a dependency on
   # libbacktrace when enabled.
   enable_perfetto_stderr_crash_dump =
-      is_debug && perfetto_build_standalone && !is_wasm && !is_win
+      is_debug && perfetto_build_standalone && !is_wasm && !is_win && !is_bsd
 
   # Enables more aggressive compiler flags that assume recent Intel CPUs.
   # Runtime checks during initialization will print an error message and exit

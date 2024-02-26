@@ -25,6 +25,9 @@
 #include <sys/mman.h>
 #include <sys/socket.h>
 #include <sys/un.h>
+#if PERFETTO_BUILDFLAG(PERFETTO_OS_BSD)
+#include <sys/wait.h>
+#endif
 #endif
 
 #include "perfetto/base/build_config.h"
@@ -993,8 +996,9 @@ TEST_F(UnixSocketTest, Sockaddr_FilesystemLinked) {
 }
 #endif  // OS_LINUX || OS_ANDROID || OS_MAC
 
-#if PERFETTO_BUILDFLAG(PERFETTO_OS_LINUX) || \
-    PERFETTO_BUILDFLAG(PERFETTO_OS_ANDROID)
+#if (PERFETTO_BUILDFLAG(PERFETTO_OS_LINUX) || \
+    PERFETTO_BUILDFLAG(PERFETTO_OS_ANDROID)) && \
+    !PERFETTO_BUILDFLAG(PERFETTO_OS_BSD)
 // Regression test for b/239725760.
 // Abstract sockets are not supported on Mac OS.
 TEST_F(UnixSocketTest, Sockaddr_AbstractUnix) {

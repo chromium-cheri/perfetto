@@ -91,12 +91,12 @@ bool IsMapped(void* start, size_t size) {
   // Fuchsia doesn't yet support paging (b/119503290).
   ignore_result(page_size);
   return true;
-#elif PERFETTO_BUILDFLAG(PERFETTO_OS_NACL) || PERFETTO_BUILDFLAG(PERFETTO_OS_BSD)
+#elif PERFETTO_BUILDFLAG(PERFETTO_OS_NACL)
   // mincore isn't available on NaCL.
   ignore_result(page_size);
   return true;
 #else
-#if PERFETTO_BUILDFLAG(PERFETTO_OS_APPLE)
+#if PERFETTO_BUILDFLAG(PERFETTO_OS_APPLE) || PERFETTO_BUILDFLAG(PERFETTO_OS_BSD)
   using PageState = char;
   static constexpr PageState kIncoreMask = MINCORE_INCORE;
 #else

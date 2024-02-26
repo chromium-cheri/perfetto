@@ -69,7 +69,7 @@ SyscallTable::SyscallTable(Architecture arch) {
 }
 
 Architecture SyscallTable::ArchFromString(base::StringView machine) {
-  if (machine == "aarch64") {
+  if (machine == "aarch64" || machine == "arm64") {
     return kAarch64;
   } else if (machine == "armv8l") {
     return kArmEabi;

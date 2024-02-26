@@ -53,8 +53,9 @@ TEST(PagedMemoryTest, Basic) {
     ASSERT_TRUE(vm_test_utils::IsMapped(ptr_raw, kSize));
 #endif
 
-#if PERFETTO_BUILDFLAG(PERFETTO_OS_LINUX) || \
-    PERFETTO_BUILDFLAG(PERFETTO_OS_ANDROID)
+#if (PERFETTO_BUILDFLAG(PERFETTO_OS_LINUX) || \
+    PERFETTO_BUILDFLAG(PERFETTO_OS_ANDROID)) && \
+    !PERFETTO_BUILDFLAG(PERFETTO_OS_BSD)
     ASSERT_TRUE(mem.AdviseDontNeed(ptr_raw, kSize));
 
     // Make sure the pages were removed from the working set.
@@ -80,8 +81,9 @@ TEST(PagedMemoryTest, SubPageGranularity) {
     *ptr64 = i;
   }
 
-#if PERFETTO_BUILDFLAG(PERFETTO_OS_LINUX) || \
-    PERFETTO_BUILDFLAG(PERFETTO_OS_ANDROID)
+#if (PERFETTO_BUILDFLAG(PERFETTO_OS_LINUX) || \
+    PERFETTO_BUILDFLAG(PERFETTO_OS_ANDROID)) && \
+    !PERFETTO_BUILDFLAG(PERFETTO_OS_BSD)
   // Do an AdviseDontNeed on the whole range, which is NOT an integer multiple
   // of the page size. The initial page must be cleared. The remaining 1024
   // might or might not be cleared depending on the OS implementation.

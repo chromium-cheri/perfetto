@@ -23,7 +23,11 @@
 namespace perfetto {
 namespace trace_processor {
 
+#if defined(__CHERI_PURE_CAPABILITY__)
+struct alignas(max_align_t) SystraceLine {
+#else // defined(__CHERI_PURE_CAPABILITY__)
 struct alignas(8) SystraceLine {
+#endif // defined(__CHERI_PURE_CAPABILITY__)
   int64_t ts;
   uint32_t pid;
   uint32_t cpu;

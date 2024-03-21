@@ -89,9 +89,18 @@ TraceBlob::~TraceBlob() {
 TraceBlob& TraceBlob::operator=(TraceBlob&& other) noexcept {
   if (this == &other)
     return *this;
+#if defined(__CHERI_PURE_CAPABILITY__)
+  // The order of the TraceBlob class's fields (specifically the data
+  // field) introduced additional padding on CHERI architectures.
+  static_assert(sizeof(*this) == base::AlignUp<sizeof(void*)>(
+                                     sizeof(data_) + sizeof(size_) +
+                                     base::AlignUp<sizeof(void*)>(
+                                     sizeof(ownership_)) + sizeof(RefCounted)),
+#else // defined(__CHERI_PURE_CAPABILITY__)
   static_assert(sizeof(*this) == base::AlignUp<sizeof(void*)>(
                                      sizeof(data_) + sizeof(size_) +
                                      sizeof(ownership_) + sizeof(RefCounted)),
+#endif // defined(__CHERI_PURE_CAPABILITY__)
                 "TraceBlob move operator needs updating");
   data_ = other.data_;
   size_ = other.size_;

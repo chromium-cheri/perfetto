@@ -58,7 +58,11 @@ class TraceTokenBuffer {
   template <typename T>
   PERFETTO_WARN_UNUSED_RESULT Id Append(T object) {
     static_assert(sizeof(T) % 8 == 0, "Size must be a multiple of 8");
+#if defined(__CHERI_PURE_CAPABILITY__)
+    static_assert(alignof(T) == alignof(max_align_t), "Alignment must be 8");
+#else // defined(__CHERI_PURE_CAPABILITY__)
     static_assert(alignof(T) == 8, "Alignment must be 8");
+#endif // defined(__CHERI_PURE_CAPABILITY__)
     BumpAllocator::AllocId id = AllocAndResizeInternedVectors(sizeof(T));
     new (allocator_.GetPointer(id)) T(std::move(object));
     return Id{id};

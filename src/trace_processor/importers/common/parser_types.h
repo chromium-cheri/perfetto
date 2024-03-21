@@ -26,21 +26,33 @@
 namespace perfetto {
 namespace trace_processor {
 
+#if defined(__CHERI_PURE_CAPABILITY__)
+struct alignas(max_align_t) InlineSchedSwitch {
+#else // defined(__CHERI_PURE_CAPABILITY__)
 struct alignas(8) InlineSchedSwitch {
+#endif // defined(__CHERI_PURE_CAPABILITY__)
   int64_t prev_state;
   int32_t next_pid;
   int32_t next_prio;
   StringPool::Id next_comm;
 };
 
+#if defined(__CHERI_PURE_CAPABILITY__)
+struct alignas(max_align_t) InlineSchedWaking {
+#else // defined(__CHERI_PURE_CAPABILITY__)
 struct alignas(8) InlineSchedWaking {
+#endif // defined(__CHERI_PURE_CAPABILITY__)
   int32_t pid;
   int32_t target_cpu;
   int32_t prio;
   StringPool::Id comm;
 };
 
+#if defined(__CHERI_PURE_CAPABILITY__)
+struct alignas(max_align_t) JsonEvent {
+#else // defined(__CHERI_PURE_CAPABILITY__)
 struct alignas(8) JsonEvent {
+#endif // defined(__CHERI_PURE_CAPABILITY__)
   std::string value;
 };
 

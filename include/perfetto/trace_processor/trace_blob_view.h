@@ -45,7 +45,11 @@ namespace trace_processor {
 //  - TraceBlob: writable, move-only, single-instance.
 //  - TraceBlobView: readable, copyable, multiple-instances can hold onto
 //                   (different sub-slices of) the same refcounted TraceBlob.
+#if defined(__CHERI_PURE_CAPABILITY__)
+class alignas(max_align_t) TraceBlobView {
+#else // defined(__CHERI_PURE_CAPABILITY__)
 class alignas(8) TraceBlobView {
+#endif // defined(__CHERI_PURE_CAPABILITY__)
  public:
   // Takes ownership of the passed |blob|.
   static constexpr size_t kWholeBlob = std::numeric_limits<size_t>::max();

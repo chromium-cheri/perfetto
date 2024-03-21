@@ -198,14 +198,22 @@ class Field {
   // Fields are deliberately not initialized to keep the class trivially
   // constructible. It makes a large perf difference for ProtoDecoder.
 
+#if defined(__CHERI_PURE_CAPABILITY__)
+  uintptr_t int_value_;  // In kLengthDelimited this contains the data() addr.
+#else // defined(__CHERI_PURE_CAPABILITY__)
   uint64_t int_value_;  // In kLengthDelimited this contains the data() addr.
+#endif // defined(__CHERI_PURE_CAPABILITY__)
   uint32_t size_;       // Only valid when when type == kLengthDelimited.
   uint16_t id_;         // Proto field ordinal.
   uint8_t type_;        // proto_utils::ProtoWireType.
 };
 
 // The Field struct is used in a lot of perf-sensitive contexts.
+#if defined(__CHERI_PURE_CAPABILITY__)
+static_assert(sizeof(Field) == 32, "Field struct too big");
+#else // defined(__CHERI_PURE_CAPABILITY__)
 static_assert(sizeof(Field) == 16, "Field struct too big");
+#endif // defined(__CHERI_PURE_CAPABILITY__)
 
 }  // namespace protozero
 

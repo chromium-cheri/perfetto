@@ -73,7 +73,11 @@ struct Variadic {
 
   // This variadic type is used to distinguish between integers and pointer
   // values for correct JSON export of TrackEvent arguments.
+#if defined(__CHERI_PURE_CAPABILITY__)
+  static Variadic Pointer(uintptr_t pointer_value) {
+#else // defined(__CHERI_PURE_CAPABILITY__)
   static Variadic Pointer(uint64_t pointer_value) {
+#endif // defined(__CHERI_PURE_CAPABILITY__)
     Variadic variadic;
     variadic.type = Type::kPointer;
     variadic.pointer_value = pointer_value;
@@ -133,7 +137,11 @@ struct Variadic {
     uint64_t uint_value;
     StringPool::Id string_value;
     double real_value;
+#if defined(__CHERI_PURE_CAPABILITY__)
+    uintptr_t pointer_value;
+#else // defined(__CHERI_PURE_CAPABILITY__)
     uint64_t pointer_value;
+#endif // defined(__CHERI_PURE_CAPABILITY__)
     bool bool_value;
     StringPool::Id json_value;
   };

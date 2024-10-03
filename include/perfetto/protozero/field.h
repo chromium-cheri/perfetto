@@ -150,11 +150,19 @@ class Field {
     return size_;
   }
 
+#if defined(__CHERI_PURE_CAPABILITY__)
+  uintptr_t raw_int_value() const { return int_value_; }
+#else   // !__CHERI_PURE_CAPABILITY__
   uint64_t raw_int_value() const { return int_value_; }
+#endif  // !__CHERI_PURE_CAPABILITY__
 
   void initialize(uint16_t id,
                   uint8_t type,
+#if defined(__CHERI_PURE_CAPABILITY__)
+                  uintptr_t int_value,
+#else   // !__CHERI_PURE_CAPABILITY__
                   uint64_t int_value,
+#endif  // !__CHERI_PURE_CAPABILITY__
                   uint32_t size) {
     id_ = id;
     type_ = type;

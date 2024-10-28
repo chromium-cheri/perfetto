@@ -78,12 +78,22 @@ ParseFieldResult ParseOneField(const uint8_t* const buffer,
 
   auto field_type = static_cast<uint8_t>(preamble & kFieldTypeMask);
   const uint8_t* new_pos = pos;
+#if defined(__CHERI_PURE_CAPABILITY__)
+  uintptr_t int_value = 0;
+#else   // !__CHERI_PURE_CAPABILITY__
   uint64_t int_value = 0;
+#endif  // !__CHERI_PURE_CAPABILITY__
   uint64_t size = 0;
 
   switch (field_type) {
     case static_cast<uint8_t>(ProtoWireType::kVarInt): {
+#if defined(__CHERI_PURE_CAPABILITY__)
+      uint64_t temp;
+      new_pos = ParseVarInt(pos, end, &temp);
+      int_value = temp;
+#else   // !__CHERI_PURE_CAPABILITY__
       new_pos = ParseVarInt(pos, end, &int_value);
+#endif  // !__CHERI_PURE_CAPABILITY__
 
       // new_pos not being greater than pos means ParseVarInt could not fully
       // parse the number. This is because we are out of space in the buffer.

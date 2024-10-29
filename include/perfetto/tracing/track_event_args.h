@@ -79,7 +79,11 @@ class TerminatingFlow {
   // See `Flow::FromPointer(void*)`.
   static PERFETTO_ALWAYS_INLINE inline std::function<void(EventContext&)>
   FromPointer(void* ptr) {
+#if defined(__CHERI_PURE_CAPABILITY__)
+    return ProcessScoped(static_cast<uint64_t>(reinterpret_cast<uintptr_t>(ptr)));
+#else   // !__CHERI_PURE_CAPABILITY__
     return ProcessScoped(reinterpret_cast<uintptr_t>(ptr));
+#endif  // !__CHERI_PURE_CAPABILITY__
   }
 
   // See `Flow::Global(uint64_t)`.

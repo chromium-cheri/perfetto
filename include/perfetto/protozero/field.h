@@ -94,7 +94,11 @@ class Field {
     PERFETTO_DCHECK(!valid() || type() == proto_utils::ProtoWireType::kVarInt ||
                     type() == proto_utils::ProtoWireType::kFixed32 ||
                     type() == proto_utils::ProtoWireType::kFixed64);
+#if defined(__CHERI_PURE_CAPABILITY__)
+    return static_cast<uint64_t>(int_value_);
+#else   // !__CHERI_PURE_CAPABILITY__
     return int_value_;
+#endif  // !__CHERI_PURE_CAPABILITY__
   }
 
   int64_t as_int64() const {

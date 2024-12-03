@@ -35,7 +35,13 @@ namespace {
 constexpr size_t kChunkSize = 16;
 constexpr uint8_t kTestBytes[] = {0, 0, 0, 0, 0x42, 1, 0x42, 0xff, 0x42, 0};
 constexpr const char kStartWatermark[] = {'a', 'b', 'c', 'd',
+#if defined(__CHERI_PURE_CAPABILITY__)
+                                          '1', '2', '3', '4',
+                                          'e', 'f', 'g', 'h',
+                                          '5', '6', '7', '\0'};
+#else   // !__CHERI_PURE_CAPABILITY__
                                           '1', '2', '3', '\0'};
+#endif  // !__CHERI_PURE_CAPABILITY__
 constexpr const char kEndWatermark[] = {'9', '8', '7', '6',
                                         'z', 'w', 'y', '\0'};
 
